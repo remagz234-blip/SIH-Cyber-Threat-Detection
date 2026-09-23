@@ -98,9 +98,13 @@ if st.session_state.capture_process is None:
 
     if st.sidebar.button("▶ Start Monitoring", use_container_width=True):
 
- st.session_state.capture_process = subprocess.Popen(
-    [sys.executable, "SIH_Cyber_Threat_Detection/traffic_capture.py"]
-)
+        st.session_state.capture_process = subprocess.Popen(
+            [
+                sys.executable,
+                "SIH_Cyber_Threat_Detection/traffic_capture.py"
+            ]
+        )
+
         st.sidebar.success("Live packet capture started")
         st.rerun()
 
