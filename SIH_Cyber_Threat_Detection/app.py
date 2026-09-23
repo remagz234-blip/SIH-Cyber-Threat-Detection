@@ -5,6 +5,7 @@ import numpy as np
 import plotly.express as px
 import subprocess
 import sys
+import time
 
 from streamlit_autorefresh import st_autorefresh
 
@@ -83,7 +84,7 @@ st.divider()
 
 # Refresh dashboard every 5 seconds
 st_autorefresh(
-    interval=5000,
+    interval=3000,
     key="network_refresh"
 )
 
@@ -126,10 +127,23 @@ live_file = "SIH_Cyber_Threat_Detection/network_traffic.csv"
 
 if os.path.exists(live_file):
 
-    traffic_data = pd.read_csv(live_file)
+    all_traffic = pd.read_csv(live_file)
+
+    # Simulate incoming traffic from the existing CSV
+    if "demo_rows" not in st.session_state:
+        st.session_state.demo_rows = 10
+
+    st.session_state.demo_rows += 5
+
+    if st.session_state.demo_rows > len(all_traffic):
+        st.session_state.demo_rows = len(all_traffic)
+
+    traffic_data = all_traffic.iloc[
+        :st.session_state.demo_rows
+    ].copy()
 
     st.sidebar.success(
-        f"Live CSV loaded: {len(traffic_data):,} packets"
+        f"Demo traffic loaded: {len(traffic_data):,} packets"
     )
 
     # Convert captured packet data into model features
